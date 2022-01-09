@@ -1,0 +1,45 @@
+#!/bin/bash
+echo "Updating system..."
+sudo apt update
+sudo apt upgrade
+echo "Installing wordpress dependinces"
+sudo apt-get install apache2 -y
+sudo apt-get install php -y
+sudo apt-get install mariadb-server php-mysql -y
+sudo service apache2 restart
+echo "Installing wordpress..."
+cd /var/www/html
+sudo rm *
+sudo wget http://wordpress.org/latest.tar.gz
+sudo tar xzf latest.tar.gz
+sudo mv wordpress/* .
+sudo rm -rf wordpress latest.tar.gz
+sudo chown -R www-data: .
+echo "You will be asked Enter current password for root (enter for none):   press Enter."
+
+echo "Type in Y and press Enter to Set root password?."
+
+echo "Type in a password at the New password: prompt, and press Enter."
+
+echo "Type in Y to Remove anonymous users."
+
+echo "Type in Y to Disallow root login remotely."
+
+echo "Type in Y to Remove test database and access to it."
+
+echo "Type in Y to Reload privilege tables now."
+echo Now we will install mysql.
+
+sudo mysql_secure_installation
+clear
+echo "Enter create database wordpress;"
+echo "Enter GRANT ALL PRIVILEGES ON wordpress.* TO 'root'@'localhost' IDENTIFIED BY 'YOURPASSWORD';"
+echo "Enter FLUSH PRIVILEGES;"
+echo "Exit the prompt with ctrl-d"
+sudo mysql -u root -p
+
+clear
+echo "Wordpress has been installed."
+echo "restarting in 10 seconds..."
+sleep 10
+reboot
